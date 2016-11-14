@@ -13,23 +13,29 @@ function site_subscription_schema() {
     'description' => 'Таблица для хранения адресов e-mail.',
     'fields' => array(
       'uid' => array(
-        'description' => 'Ссылка на идентификатор.',
-        'type' => 'serial',
-        'unsigned' => TRUE,
+        'description' => 'UID идентификатор пользователя.',
+        'type' => 'int',
         'not null' => TRUE,
+        'default' => 0,
       ),
-      'uuid' => array(
-        'description' => 'UUID строковое значение.',
-        'type' => 'varchar_ascii',
-        'length' => 128,
+      'type' => array(
+        'description' => 'Тип элемента для подписки.',
+        'type' => 'varchar',
+        'length' => 32,
         'not null' => TRUE,
-        'default' => '',
+        'default' => 'all',
       ),
+      'type_id' => array(
+        'description' => 'Идентификатор элемента для подписки.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),      
       'mail' => array(
-        'description' => 'E-mail посетителя.',
+        'description' => 'E-mail.',
         'type' => 'varchar',
         'length' => 255,
-        'not null' => FALSE,
+        'not null' => TRUE,
         'default' => '',
       ),
       'created' => array(
@@ -38,11 +44,17 @@ function site_subscription_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-    ),
-    'primary key' => array('uid'),
+    ),    
     'unique keys' => array(
-      'uuid' => array('uuid'),
+      'uid' => array('uid'),
     ),
+    'foreign keys' => array(
+      'users' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),    
   );
+  
   return $schema;
 }

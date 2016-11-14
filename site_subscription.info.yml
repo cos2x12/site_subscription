@@ -1,5 +1,5 @@
-name: 'Site subscription'
-description: 'Implements newsletters from the site.'
+name: 'Subscriptions'
+description: 'It allows you to create a subscription to the site.'
 package: Kvantstudio
 
 type: module
