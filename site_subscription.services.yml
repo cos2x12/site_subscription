@@ -1,0 +1,4 @@
+services:
+  site_subscription.database:
+    class: Drupal\site_subscription\Controller\SubscriptionDatabaseController
+    arguments: ['@database']
