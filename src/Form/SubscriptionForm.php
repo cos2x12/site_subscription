@@ -18,7 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
 * Объявляем нашу форму, наследуясь от FormBase.
 * Название класса строго должно соответствовать названию файла.
 */
-class SubscriptionForm extends FormBase {    
+class SubscriptionForm extends FormBase {
     /**
     * {@inheritdoc}.
     */
@@ -69,9 +69,19 @@ class SubscriptionForm extends FormBase {
     */
     public function submitForm(array &$form, FormStateInterface $form_state) {
         $account = \Drupal::currentUser();
-				$connection = \Drupal::database();
+        $connection = \Drupal::database();
         
-        if ($account->id()) {
+        $result = $connection->select('site_subscription', 'n')
+        ->fields('n', array('mail'))
+        ->condition('n.mail', $form_state->getValue('mail'));
+        
+        // Execute the statement
+        $mail = $result->execute()->fetchField();
+        
+        if ($mail == $form_state->getValue('mail')) {
+            drupal_set_message($this->t('Your e-mail has been sent to'));
+        }
+        elseif ($account->id()) {
             $connection->insert('site_subscription')
             ->fields([
             'uid' => $account->id(),

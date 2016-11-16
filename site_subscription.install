@@ -14,9 +14,9 @@ function site_subscription_schema() {
     'fields' => array(
       'uid' => array(
         'description' => 'UID идентификатор пользователя.',
-        'type' => 'int',
+        'type' => 'serial',
+        'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 0,
       ),
       'type' => array(
         'description' => 'Тип элемента для подписки.',
