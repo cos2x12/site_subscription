@@ -34,12 +34,17 @@ class SubscriptionForm extends FormBase {
     public function buildForm(array $form, FormStateInterface $form_state) {
         // Объявляем телефон.
         $form['mail'] = array(
-        '#type' => 'email',
-        '#title' => $this->t('Enter your E-mail'),
-        '#description' => $this->t('A valid e-mail address.'),
-        '#attributes' => array('placeholder' => $this->t('user@mydomain.com'), 'class' => ['form-control']),
+            '#type' => 'email',
+            '#title' => $this->t('Enter your E-mail'),
+            '#description' => $this->t('A valid e-mail address.'),
+            '#attributes' => array('placeholder' => $this->t('user@mydomain.com'), 'class' => ['form-control']),
         );
-        
+        $form['type_subscription'] = array(
+            '#type' => 'checkboxes',
+            '#options' => array('NEWS' => $this->t('News'), 'COURSES' => $this->t('Courses')),
+            '#title' => $this->t('Choose subscription type'),
+        );
+
         // Предоставляет обёртку для одного или более Action элементов.
         $form['actions']['#type'] = 'actions';
         
@@ -70,7 +75,7 @@ class SubscriptionForm extends FormBase {
     public function submitForm(array &$form, FormStateInterface $form_state) {
         $account = \Drupal::currentUser();
         $connection = \Drupal::database();
-        
+
         $result = $connection->select('site_subscription', 'n')
         ->fields('n', array('mail'))
         ->condition('n.mail', $form_state->getValue('mail'));
