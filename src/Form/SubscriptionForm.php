@@ -25,7 +25,7 @@ class SubscriptionForm extends FormBase {
     public function getFormId() {
         return 'site_subscription_form';
     }
-    
+
     /**
     * Создание нашей формы.
     *
@@ -43,6 +43,7 @@ class SubscriptionForm extends FormBase {
             '#type' => 'checkboxes',
             '#options' => array('NEWS' => $this->t('News'), 'COURSES' => $this->t('Courses')),
             '#title' => $this->t('Choose subscription type'),
+            '#default_value' => 0,
         );
 
         // Предоставляет обёртку для одного или более Action элементов.
@@ -64,7 +65,7 @@ class SubscriptionForm extends FormBase {
     * {@inheritdoc}
     */
     public function validateForm(array &$form, FormStateInterface $form_state) {
-        return \Drupal::service('email.validator')->isValid($mail);
+        return \Drupal::service('email.validator')->isValid($email);
     }
     
     /**
@@ -75,15 +76,19 @@ class SubscriptionForm extends FormBase {
     public function submitForm(array &$form, FormStateInterface $form_state) {
         $account = \Drupal::currentUser();
         $connection = \Drupal::database();
-
+        $options = $form_state->getValue('options');
+        dpm($options);
         $result = $connection->select('site_subscription', 'n')
         ->fields('n', array('mail'))
         ->condition('n.mail', $form_state->getValue('mail'));
-        
-        // Execute the statement
         $mail = $result->execute()->fetchField();
-        
-        if ($mail == $form_state->getValue('mail')) {
+        // Execute the statement
+        $result1 = $connection->select('site_subscription', 'n')
+        ->fields('n', array('uid'))
+        ->condition('n.uid', $account->id());
+        $uid = $result1->execute()->fetchField();
+
+        if ($mail == $form_state->getValue('mail') && $account->id() == $uid) {
             drupal_set_message($this->t('Your e-mail has been sent to'));
         }
         elseif ($account->id()) {
@@ -91,7 +96,7 @@ class SubscriptionForm extends FormBase {
             ->fields([
             'uid' => $account->id(),
             'type' => 'all',
-            'type_id' => 0,
+            'type_id' => '0',
             'mail' => $account->getEmail(),
             'created' => REQUEST_TIME,
             ])
@@ -102,11 +107,12 @@ class SubscriptionForm extends FormBase {
             ->fields([
             'uid' => 0,
             'type' => 'all',
-            'type_id' => 0,
+            'type_id' => '0',
             'mail' => $form_state->getValue('mail'),
             'created' => REQUEST_TIME,
             ])
             ->execute();
         }
+
     }
 }
