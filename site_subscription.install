@@ -10,7 +10,7 @@
  */
 function site_subscription_schema() {
   $schema['site_subscription'] = array(
-    'description' => 'Таблица для хранения адресов e-mail.',
+    'description' => 'Таблица для хранения подписчиков.',
     'fields' => array(
       'uid' => array(
         'description' => 'UID идентификатор пользователя.',

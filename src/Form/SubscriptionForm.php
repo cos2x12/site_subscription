@@ -2,21 +2,15 @@
 /**
 * @file
 * Contains \Drupal\site_subscription\Form\SubscriptionForm.
-*
-* В комментарии выше указываем, что содержится в данном файле.
 */
 
-// Объявляем пространство имён формы. Drupal\site_subscription\Form
 namespace Drupal\site_subscription\Form;
 
-// Указываем что нам потребуется FormBase, от которого мы будем наследоваться
-// а также FormStateInterface который позволит работать с данными.
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
-* Объявляем нашу форму, наследуясь от FormBase.
-* Название класса строго должно соответствовать названию файла.
+* Subscription form.
 */
 class SubscriptionForm extends FormBase {
     /**
@@ -27,8 +21,6 @@ class SubscriptionForm extends FormBase {
     }
     
     /**
-    * Создание нашей формы.
-    *
     * {@inheritdoc}.
     */
     public function buildForm(array $form, FormStateInterface $form_state) {
@@ -41,12 +33,10 @@ class SubscriptionForm extends FormBase {
         '#description' => $this->t('A valid e-mail address.'),
         '#attributes' => array('placeholder' => $this->t('user@mydomain.com'), 'class' => ['form-control']),
         '#access' => $account->id() ? FALSE : TRUE,
-        );
-
-        // Предоставляет обёртку для одного или более Action элементов.
-        $form['actions']['#type'] = 'actions';
+        );        
 
         // Добавляем нашу кнопку для отправки.
+        $form['actions']['#type'] = 'actions';
         $form['actions']['submit'] = array(
         '#type' => 'submit',
         '#value' => $this->t('Subscribe'),
@@ -57,8 +47,6 @@ class SubscriptionForm extends FormBase {
     }
     
     /**
-    * Валидация отправленых данных в форме.
-    *
     * {@inheritdoc}
     */
     public function validateForm(array &$form, FormStateInterface $form_state) {
@@ -66,8 +54,6 @@ class SubscriptionForm extends FormBase {
     }
     
     /**
-    * Отправка формы.
-    *
     * {@inheritdoc}
     */
     public function submitForm(array &$form, FormStateInterface $form_state) {
@@ -109,7 +95,6 @@ class SubscriptionForm extends FormBase {
                 'created' => REQUEST_TIME,
             ])
             ->execute();
-        }
-        
+        }        
     }
 }

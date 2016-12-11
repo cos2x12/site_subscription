@@ -1,9 +1,7 @@
 <?php
 
-namespace Drupal\site_subscription\Form;
 namespace Drupal\site_subscription\Plugin\Block;
-use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Form\FormStateInterface;
+
 use Drupal\Core\Block\BlockBase;
 
 /**
@@ -15,15 +13,14 @@ use Drupal\Core\Block\BlockBase;
  * )
  */
 class SubscriptionBlock extends BlockBase {
-  /**
-   * {@inheritdoc}
-   */
-  public function build() {
 
-    return array(
-    $form = \Drupal::formBuilder()->getForm('Drupal\site_subscription\Form\SubscriptionForm'),
-    );
-  }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function build() {
+        return array(
+            $form = \Drupal::formBuilder()->getForm('Drupal\site_subscription\Form\SubscriptionForm'),
+        );
+    }
 
 }

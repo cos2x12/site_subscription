@@ -1,15 +1,7 @@
-site_subscription.content:
-  path: '/'
-  defaults:
-    _controller: '\Drupal\site_subscription\Controller\SiteSubscriptionController::content'
-    _title: 'A list of registered organizations'
-  requirements:
-    _permission: 'access content'
 site_subscription.form:
   path: '/subscription'
   defaults:
-    _title: 'Site subscription.'
-    # Подгружаем форму по неймспейсу.
+    _title: 'Site subscription.'    
     _form: '\Drupal\site_subscription\Form\SubscriptionForm'
   requirements:
     _permission: 'access content'
