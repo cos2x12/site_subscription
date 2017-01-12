@@ -1,0 +1,135 @@
+<?php
+
+use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Database\Database;
+use Drupal\user\RoleInterface;
+
+function site_subscription_cron() {
+    $connection = \Drupal::database();
+    $last_count=\Drupal::state()->get('count');
+    if(!$last_count){
+        $last_count = 0;
+    }
+
+
+    $query = $connection->select('site_subscription', 'n');
+    $query->fields('n');
+    $query->range($last_count, 5);
+    $result = $query->execute();
+    $last_count+=5;
+    $limit=\Drupal::state()->set('count', 'last_count'); 
+
+    foreach ($result as $row) {
+        $limit++;       
+        $mail = $row->mail;
+        \Drupal::logger('site_subscription')->notice($mail);
+    }
+   
+}
+
+// function site_subscription_cron() {
+//     $connection = \Drupal::database();
+//     $queue = \Drupal::queue('site_subscription_queue');
+//     $end = time() + 1;
+
+//     $query = $connection->select('site_subscription', 'n');
+//     $query->fields('n');
+//     $result = $query->execute();
+
+//     # Создаем нашу очередь.
+//     $queue->createQueue();
+//     $queue->claimItem($lease_time = 60);
+
+//     while (time('') < $end){
+//         foreach ($result as $row) {
+//             $queue->createItem([
+//             $mail = $row->mail,
+//             ]);
+//             \Drupal::logger('site_subscription')->notice($mail);
+//         }
+
+//     }
+//     $queue->deleteQueue();
+//
+// /*/**
+//  * Implements hook_cron_queue_info().
+//  */
+// function site_subscription_cron_queue_info() {
+//   $queue['site_subscription_queue'] = array(
+//     'worker callback' => 'site_subscription_item_process',
+//     'time' => 60,
+//   );
+//   return $queue;
+// }
+
+// /**
+//  * Implements hook_cron().
+//  */
+// function site_subscription_cron() {
+
+//   // Загружаем массив, каждый элемент которого
+//   // будет являться элементом очереди
+//   $items = site_subscription_load_data();
+
+//   if ($items) {
+//     // Создаём новую очередь
+//     $queue = \Drupal::queue('site_subscription_queue');
+//     $queue->createQueue();
+
+//     // Каждый элемент ставим в очередь, т.е.
+//     // по факту - идёт запись в базу данных
+//     foreach ($items as $item) {
+//       $queue->createItem($item);
+//       \Drupal::logger('site_subscription')->notice($item);
+//     }
+//   }
+// }
+
+// function site_subscription_load_data() {
+//   $connection = \Drupal::database();
+//     $data = '';
+//     $query = $connection->select('site_subscription', 'n');
+//     $query->fields('n');
+//     $result = $query->execute();
+//     foreach ($result as $row) {
+//        $data = $row->mail;
+
+//   // Сюда я буду ложить все данные
+//   //$data = array();
+//   // Вытягиваю из бд имя и емейл каждого пользователя
+//   //$users = db_query('SELECT uid, mail FROM {site_subscription}');
+//   // Ложу всех
+//   //foreach ($users as $user) {
+//   //  $data[] = array(
+//   //    'mail' => $user->mail,
+//   //    'uid' => $user->uid,
+//   //  );
+//   }
+//   dpm($data);
+//   return $data;
+// }
+
+// function site_subscription_item_process($data) {
+//   // Строю параметры отправки письма
+//   $site_name = variable_get('kadry365.ru', '');
+//   $params = array();
+//   $params['subject'] = t('Notification from !kadry365.ru', array('!kadry365.ru' => $site_name));
+//   $params['body'] = t('Hi, !uid', array('!uid' => $data['uid']));
+//   // Отправляю письмо
+//   drupal_mail('site_subscription', 'send_notifications', $data['mail'], language_default(), $params);
+// }
+
+// /**
+//  * Implementats of hook_mail().
+//  */
+// function site_subscription_mail($key, &$message, $params) {
+//   if ($key == 'send_notifications') {
+//     $message['subject'] = $params['subject'];
+//     $message['body'][] = $params['body'];
+//   }
+// }*/
+/**
+* @file
+* Главный файл модуля создания отправки подписок site_subscription_mail системы «КАДРЫ 365».
+*/

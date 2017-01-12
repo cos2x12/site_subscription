@@ -70,7 +70,8 @@ class SubscriptionForm extends FormBase {
         ->fields('n', array('uid'))
         ->condition('n.uid', $account->id());
         $uid = $result1->execute()->fetchField();
-
+        kint($uid);
+        dpm($uid);
         if ($mail == $form_state->getValue('mail') && $account->id() == $uid) {
             drupal_set_message($this->t('You are subscribed'));
         }
@@ -95,6 +96,7 @@ class SubscriptionForm extends FormBase {
                 'created' => REQUEST_TIME,
             ])
             ->execute();
-        }        
+        }
+
     }
 }
