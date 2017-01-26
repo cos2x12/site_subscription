@@ -25,7 +25,7 @@ class SubscriptionForm extends FormBase {
     */
     public function buildForm(array $form, FormStateInterface $form_state) {
         $account = \Drupal::currentUser();
-
+        
         // Объявляем e-mail.
         $form['mail'] = array(
         '#type' => 'email',
@@ -33,8 +33,8 @@ class SubscriptionForm extends FormBase {
         '#description' => $this->t('A valid e-mail address.'),
         '#attributes' => array('placeholder' => $this->t('user@mydomain.com'), 'class' => ['form-control']),
         '#access' => $account->id() ? FALSE : TRUE,
-        );        
-
+        );
+        
         // Добавляем нашу кнопку для отправки.
         $form['actions']['#type'] = 'actions';
         $form['actions']['submit'] = array(
@@ -59,44 +59,33 @@ class SubscriptionForm extends FormBase {
     public function submitForm(array &$form, FormStateInterface $form_state) {
         $account = \Drupal::currentUser();
         $connection = \Drupal::database();
-
-        $result = $connection->select('site_subscription', 'n')
-        ->fields('n', array('mail'))
-        ->condition('n.mail', $form_state->getValue('mail'));
-        $mail = $result->execute()->fetchField();
-        // Execute the statement
-
-        $result1 = $connection->select('site_subscription', 'n')
-        ->fields('n', array('uid'))
-        ->condition('n.uid', $account->id());
-        $uid = $result1->execute()->fetchField();
-        kint($uid);
-        dpm($uid);
-        if ($mail == $form_state->getValue('mail') && $account->id() == $uid) {
+                
+        if ($account->id()) {
+            $result = $connection->select('site_subscription', 'n')            
+            ->condition('n.uid', $account->id())
+            ->condition('n.type', 'all')
+            ->condition('n.type_id', 0);
+            $count = $result->countQuery()->execute()->fetchField();
             drupal_set_message($this->t('You are subscribed'));
+        } else {
+            $result = $connection->select('site_subscription', 'n')            
+            ->condition('n.mail', $form_state->getValue('mail'))
+            ->condition('n.type', 'all')
+            ->condition('n.type_id', 0);
+            $count = $result->countQuery()->execute()->fetchField();
         }
-        elseif ($account->id()) {
+                
+        if (!$count) {            
             $connection->insert('site_subscription')
             ->fields([
                 'uid' => $account->id(),
                 'type' => 'all',
                 'type_id' => '0',
-                'mail' => $account->getEmail(),
+                'mail' => $account->id() ? $account->getEmail() : $form_state->getValue('mail'),
                 'created' => REQUEST_TIME,
             ])
             ->execute();
-        }
-        else {
-            $connection->insert('site_subscription')
-            ->fields([
-                'uid' => 0,
-                'type' => 'all',
-                'type_id' => '0',
-                'mail' => $form_state->getValue('mail'),
-                'created' => REQUEST_TIME,
-            ])
-            ->execute();
-        }
-
+        } 
+               
     }
 }
