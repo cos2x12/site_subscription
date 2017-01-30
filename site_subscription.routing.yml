@@ -9,6 +9,15 @@ site_subscription.form:
 site_subscription.admin:
   path: '/admin/config/kvantstudio/subscription'
   defaults:
-    _title: 'Subscriptions'    
+    _title: 'Subscription number items'
+    _form: '\Drupal\site_subscription\Form\SubscriptionNumberItemsForm'            
   requirements:
     _permission: 'access administration pages'
+
+# site_subscription.subscription_number_items:
+#   path: '/admin/config/kvantstudio/subscription/subscription-number-items'
+#   defaults:
+#     _title: 'Subscription number items'
+#     _form: '\Drupal\site_subscription\Form\SubscriptionNumberItemsForm'    
+#   requirements:
+#     _permission: 'access administration pages'    

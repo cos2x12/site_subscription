@@ -9,9 +9,20 @@ class SiteSubController extends ControllerBase {
     /**
      * Страница отображения зарегистрированных слайдов.
      */
-    public function getSubscriptions() {
+    public function getSubscription() {
         return array(
-            '#theme' => 'site_subscription',
+            '#theme' => 'site_subscription_admin_page',            
+            '#attached' => array(
+                'library' => array(
+                    'site_subscription/subscription',
+                ),
+            ),
+            '#cache' => [
+                'keys' => ['subscription', 'full'],
+                'tags' => ['subscription'],
+                'contexts' => ['languages', 'timezone'],
+                'max-age' => Cache::PERMANENT,
+            ],            
         );
     }
 
