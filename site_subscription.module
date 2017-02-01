@@ -4,18 +4,20 @@ use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Database\Database;
 use Drupal\user\RoleInterface;
+use Drupal\Core\Form\ConfigFormBase;
 
 function site_subscription_cron() {
     $connection = \Drupal::database();
-    $last_count=\Drupal::state()->get('count');
+    $value_settings = \Drupal::state()->get('site_subscription.settings', 'number');
+    $last_count = \Drupal::state()->get('count');
     if(!$last_count){
         $last_count = 0;
         }   
     $query = $connection->select('site_subscription', 'n');
     $query->fields('n');
-    $query->range($last_count, 5);
+    $query->range($last_count, $value_settings);
     $result = $query->execute();
-    $last_count = $last_count + 5;
+    $last_count = $last_count + $value_settings;
     $limit = \Drupal::state()->set('count', $last_count); 
     
     foreach ($result as $row) {
