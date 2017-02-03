@@ -1,15 +1,13 @@
 <?php
 
-use Drupal\Core\Queue\QueueWorkerBase;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Database\Database;
-use Drupal\user\RoleInterface;
-use Drupal\Core\Form\ConfigFormBase;
 
+//функция отправки по крону
 function site_subscription_cron() {
     $connection = \Drupal::database();
-    $value_settings = \Drupal::config('site_subscription.settings');
-    $value_settings->get('number');
+    $config = \Drupal::config('site_subscription.settings');
+    $value_settings = $config->get('number');
+
     $last_count = \Drupal::state()->get('count');
     if(!$last_count){
         $last_count = 0;
@@ -18,7 +16,7 @@ function site_subscription_cron() {
     $query->fields('n');
     $query->range($last_count, $value_settings);
     $result = $query->execute();
-    $last_count = $last_count + $value_settings;
+    $last_count = $last_count + (int) $value_settings;
     $limit = \Drupal::state()->set('count', $last_count); 
     
     foreach ($result as $row) {
