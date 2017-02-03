@@ -2,7 +2,7 @@
 
 use Drupal\Core\Database\Database;
 
-<<<<<<< HEAD
+
 //функция отправки по крону
 function site_subscription_cron() {
     $connection = \Drupal::database();
@@ -13,7 +13,6 @@ function site_subscription_cron() {
     if(!$last_count){
         $last_count = 0;
         }   
-=======
 /**
  * Implements hook_cron().
  */
@@ -28,21 +27,20 @@ function site_subscription_cron() {
         $site_subscription_count = 0;
     }
 
->>>>>>> 6fb2226ae96efe2437f93266bf325a363d047141
+
     $query = $connection->select('site_subscription', 'n');
     $query->fields('n');
     $query->range($site_subscription_count, $number);
     $result = $query->execute();
-<<<<<<< HEAD
+
     $last_count = $last_count + (int) $value_settings;
     $limit = \Drupal::state()->set('count', $last_count); 
     
     foreach ($result as $row) {
         $limit++;       
-=======
+
 
     foreach ($result as $row) {       
->>>>>>> 6fb2226ae96efe2437f93266bf325a363d047141
         $mail = $row->mail;
         \Drupal::logger('site_subscription')->notice($mail);
     }
