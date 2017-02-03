@@ -8,7 +8,8 @@ use Drupal\Core\Form\ConfigFormBase;
 
 function site_subscription_cron() {
     $connection = \Drupal::database();
-    $value_settings = \Drupal::state()->get('site_subscription.settings', 'number');
+    $value_settings = \Drupal::config('site_subscription.settings');
+    $value_settings->get('number');
     $last_count = \Drupal::state()->get('count');
     if(!$last_count){
         $last_count = 0;
