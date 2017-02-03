@@ -1,9 +1,4 @@
 site_subscription.tabdefault:
   title: 'Subscription number'
   route_name: site_subscription.admin
-  base_route: site_subscription.admin
-
-# site_subscription.subscription_number_items:
-#   title: 'Subscription number items'
-#   route_name:  site_subscription.subscription_number_items
-#   base_route: site_subscription.admin  
+  base_route: site_subscription.admin 
