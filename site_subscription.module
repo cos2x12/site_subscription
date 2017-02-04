@@ -2,32 +2,12 @@
 
 use Drupal\Core\Database\Database;
 
-<<<<<<< HEAD
 /**
  * Implements hook_cron().
  */
 function site_subscription_cron() {
     $connection = \Drupal::database();
     $config = \Drupal::config('site_subscription.settings');
-=======
-
-//функция отправки по крону
-function site_subscription_cron() {
-    $connection = \Drupal::database();
-    $config = \Drupal::config('site_subscription.settings');
-    $value_settings = $config->get('number');
-
-    $last_count = \Drupal::state()->get('count');
-    if(!$last_count){
-        $last_count = 0;
-        }   
-/**
- * Implements hook_cron().
- */
-function site_subscription_cron() {
-    $connection = \Drupal::database();
-    $config = \Drupal::config('site_subscription.settings');
->>>>>>> 5b68e21ef18f6704fd0901ba83d8a4563dcdbe1a
     $number = $config->get('number');
     
     // Считывает значение из системной конфигурации.
@@ -36,25 +16,11 @@ function site_subscription_cron() {
         $site_subscription_count = 0;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 5b68e21ef18f6704fd0901ba83d8a4563dcdbe1a
     $query = $connection->select('site_subscription', 'n');
     $query->fields('n');
     $query->range($site_subscription_count, $number);
     $result = $query->execute();
 
-<<<<<<< HEAD
-=======
-    $last_count = $last_count + (int) $value_settings;
-    $limit = \Drupal::state()->set('count', $last_count); 
-    
-    foreach ($result as $row) {
-        $limit++;       
-
-
->>>>>>> 5b68e21ef18f6704fd0901ba83d8a4563dcdbe1a
     foreach ($result as $row) {       
         $mail = $row->mail;
         \Drupal::logger('site_subscription')->notice($mail);
