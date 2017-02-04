@@ -10,7 +10,7 @@
  */
 function site_subscription_schema() {
   $schema['site_subscription'] = array(
-    'description' => 'Таблица для хранения подписчиков.',
+    'description' => 'Таблица для хранения пользователей и их подписки.',
     'fields' => array(
       'uid' => array(
         'description' => 'UID идентификатор пользователя.',
@@ -32,14 +32,14 @@ function site_subscription_schema() {
         'default' => 0,
       ),      
       'mail' => array(
-        'description' => 'E-mail.',
+        'description' => 'E-mail пользователя.',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
       ),
       'created' => array(
-        'description' => 'Дата создания записи в БД.',
+        'description' => 'Дата создания.',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,

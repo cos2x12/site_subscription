@@ -16,6 +16,7 @@ function site_subscription_cron() {
         $site_subscription_count = 0;
     }
 
+    // Перечень подписок для обработки.
     $query = $connection->select('site_subscription', 'n');
     $query->fields('n');
     $query->range($site_subscription_count, $number);

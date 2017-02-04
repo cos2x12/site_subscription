@@ -1,7 +1,12 @@
-name: 'Subscriptions'
-description: 'It allows you to create a subscription to the site.'
+name: 'Subscription'
+description: 'It allows you to create a subscription to a site published materials.'
 package: Kvantstudio
+dependencies:
+ - kvantstudio
 
 type: module
 core: '8.x'
-version: '8.x-1.0-beta1'
+version: '8.x-1.0-beta2'
+
+interface translation project: site_subscription
+interface translation server pattern: modules/custom/kvantstudio/site_subscription/translations/%project.%language.po

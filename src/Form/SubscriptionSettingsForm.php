@@ -41,10 +41,16 @@ class SubscriptionSettingsForm extends ConfigFormBase {
         // Объявляет поле количество писем для обработки за один запуск crone.
         $form['number'] = array(
             '#type' => 'textfield',
-            '#title' => $this->t('Enter the number of letters for delivery'),
-            '#description' => $this->t('It is not recommended to put a number greater than 50.'),            
-            '#default_value' => $config->get('number'),
+            '#title' => $this->t('Number of messages to be sent at the start Crone'),
+            '#description' => $this->t('The recommended value is 10.'),            
+            '#default_value' => $config->get('number') ? $config->get('number') : 10,
         );
+
+        $form['clear_cron_count'] = array(
+            '#title' => $this->t('Reset the counter of the number of emails to be sent when you start Crone'),
+            '#type' => 'checkbox',
+            '#default_value' => 0,
+        );        
 
         return parent::buildForm($form, $form_state);
     }
@@ -59,8 +65,13 @@ class SubscriptionSettingsForm extends ConfigFormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {        
         // Записывает значения в конфигурацию.
-        $this->config('site_subscription.settings')
-            ->set('number', $form_state->getValues['number'])
-            ->save();
+        $config = \Drupal::service('config.factory')->getEditable('site_subscription.settings'); 
+        $config->set('number', $form_state->getValue('number'));
+        $config->save();
+
+        // Сбросить счетчик количества писем для отправки при запуске Crone. 
+        if ($form_state->getValue('clear_cron_count')) {
+            \Drupal::state()->set('site_subscription_count', 0);
+        }
     }
 }

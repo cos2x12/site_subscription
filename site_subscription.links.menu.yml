@@ -1,6 +1,6 @@
 site_subscription.admin:
-  title: 'Subscriptions'
+  title: 'Subscription'
   description: ''
   route_name: site_subscription.admin
   parent: kvantstudio.admin_index
-  weight: 10  
+  weight: 10

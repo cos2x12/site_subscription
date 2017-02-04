@@ -1,4 +1,0 @@
-site_subscription.tabdefault:
-  title: 'Subscription number'
-  route_name: site_subscription.admin
-  base_route: site_subscription.admin 
