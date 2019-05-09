@@ -58,3 +58,35 @@ function site_subscription_schema() {
   
   return $schema;
 }
+
+/**
+ * Implements hook_schema().
+ */
+function site_subscription_cron_schema() {
+  $schema['site_subscription_cron'] = array(
+    'description' => 'Таблица объектов для рассылки.',
+    'fields' => array(
+      'type' => array(
+        'description' => 'Тип объекта для рассылки.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => 'all',
+      ),
+      'type_id' => array(
+        'description' => 'Идентификатор объекта для рассылки.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),      
+      'created' => array(
+        'description' => 'Дата создания.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),    
+  );
+  
+  return $schema;
+}
